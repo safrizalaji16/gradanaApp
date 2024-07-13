@@ -1,10 +1,7 @@
 import { SaldoHistoryModel } from "../db/saldoHistories";
 
-export const getSaldoHistories = () => SaldoHistoryModel.find();
-export const getSaldoHistoryById = (id: string) =>
-  SaldoHistoryModel.findById(id);
-export const getSaldoHistoriesWithUserInfo = async () => {
-  const result = await SaldoHistoryModel.aggregate([
+export const getSaldoHistoriesWithUserInfo = async () =>
+  await SaldoHistoryModel.aggregate([
     {
       $lookup: {
         from: "users",
@@ -14,9 +11,8 @@ export const getSaldoHistoriesWithUserInfo = async () => {
       },
     },
     { $unwind: "$user" },
+    { $sort: { createdAt: -1 } },
   ]);
-  return result;
-};
 export const createSaldoHistory = (values: Record<string, any>) =>
   new SaldoHistoryModel(values)
     .save()

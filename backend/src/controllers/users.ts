@@ -3,8 +3,9 @@ import express from "express";
 import {
   deleteUserById,
   getUserById,
-  getUsers,
   updateUserById,
+  getUsersWithSaldoHistoriesInfo,
+  getUserLogedIn,
 } from "../services/users";
 import { hashPassword } from "../helpers/bcrypt";
 
@@ -13,7 +14,20 @@ export const getAllUsers = async (
   res: express.Response
 ) => {
   try {
-    const users = await getUsers();
+    const users = await getUsersWithSaldoHistoriesInfo();
+    res.status(200).json(users).end();
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
+  }
+};
+
+export const getLogedInUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const users = await getUserLogedIn(req.cookies["token"]);
     res.status(200).json(users).end();
   } catch (error) {
     console.error(error);

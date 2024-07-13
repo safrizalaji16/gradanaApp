@@ -17,12 +17,15 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true, select: false },
     sessionToken: { type: String, select: false },
   },
+  saldoHistories: [
+    {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "SaldoHistory",
+    },
+  ],
 });
 
-UserSchema.virtual("saldoHistories", {
-  ref: "SaldoHistory",
-  localField: "_id",
-  foreignField: "userId",
-});
-
-export const UserModel = mongoose.model("User", UserSchema);
+export const UserModel = mongoose.model(
+  "User",
+  UserSchema
+);
