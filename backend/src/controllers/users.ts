@@ -5,7 +5,7 @@ import {
   getUserById,
   updateUserById,
   getUsersWithSaldoHistoriesInfo,
-  getUserLogedIn,
+  getUserLoggedIn,
 } from "../services/users";
 import { hashPassword } from "../helpers/bcrypt";
 
@@ -22,12 +22,12 @@ export const getAllUsers = async (
   }
 };
 
-export const getLogedInUser = async (
+export const getLoggedInUser = async (
   req: express.Request,
   res: express.Response
 ) => {
   try {
-    const users = await getUserLogedIn(req.cookies["token"]);
+    const users = await getUserLoggedIn(req.cookies["token"]);
     res.status(200).json(users).end();
   } catch (error) {
     console.error(error);

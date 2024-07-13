@@ -4,7 +4,7 @@ export const getUserByEmail = (email: string) => UserModel.findOne({ email });
 export const getUserBySessionToken = (sessionToken: string) =>
   UserModel.findOne({ "authentication.sessionToken": sessionToken });
 export const getUserById = (id: string) => UserModel.findById(id);
-export const getUserLogedIn = async (sessionToken: string) =>
+export const getUserLoggedIn = async (sessionToken: string) =>
   await UserModel.aggregate([
     {
       $match: { "authentication.sessionToken": sessionToken },

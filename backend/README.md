@@ -8,7 +8,7 @@ This backend provides an API for managing user data, balances, and transaction h
 
 ## Installation
 1. Clone the repository:
-  git clone https://github.com/safrizalaji16/skill-test-gradana.git
+  git clone [https://github.com/safrizalaji16/skill-test-gradana.git](https://github.com/safrizalaji16/skill-test-gradana.git)
 
 2. Install dependencies:
   npm install
