@@ -8,6 +8,7 @@ import {
   getUserLoggedIn,
 } from "../services/users";
 import { hashPassword } from "../helpers/bcrypt";
+import { get } from "lodash";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -27,8 +28,10 @@ export const getLoggedInUser = async (
   res: express.Response
 ) => {
   try {
-    const users = await getUserLoggedIn(req.cookies["token"]);
-    res.status(200).json(users).end();
+    const cookie = get(req, "identity.authentication.sessionToken") as string;
+    const users = await getUserLoggedIn(cookie);
+
+    res.status(200).json(users[0]).end();
   } catch (error) {
     console.error(error);
     res.status(400).send(error);

@@ -9,13 +9,15 @@ export const isAuthenticated = async (
   next: express.NextFunction
 ) => {
   try {
-    const sessionToken = req.cookies["token"];
+    const sessionToken = req.headers.authorization;
 
     if (!sessionToken) {
       return res.sendStatus(403);
     }
 
-    const user = await getUserBySessionToken(sessionToken);
+    const user = await getUserBySessionToken(sessionToken).select(
+      "+authentication.sessionToken"
+    );
 
     if (!user) {
       return res.sendStatus(403);
