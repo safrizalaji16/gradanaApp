@@ -9,13 +9,17 @@ export const register = async (req: express.Request, res: express.Response) => {
     const { username, email, phoneNumber, password } = req.body;
 
     if (!username || !email || !password || !phoneNumber) {
-      return res.sendStatus(400);
+      return res
+        .status(400)
+        .json({ error: "Missing required fields.", status: 400 });
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return res.sendStatus(409);
+      return res
+        .status(409)
+        .json({ error: "Email already in use.", status: 409 });
     }
 
     const user = await createUser({
@@ -30,7 +34,9 @@ export const register = async (req: express.Request, res: express.Response) => {
     return res.status(201).json(user).end();
   } catch (error) {
     console.error(error);
-    return res.sendStatus(400);
+    return res
+      .status(500)
+      .json({ error: "Internal server error.", status: 500 });
   }
 };
 
@@ -39,13 +45,17 @@ export const login = async (req: express.Request, res: express.Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.sendStatus(400);
+      return res
+        .status(400)
+        .json({ error: "Missing required fields.", status: 400 });
     }
 
     const user = await getUserByEmail(email).select("+authentication.password");
 
     if (!user) {
-      return res.sendStatus(400);
+      return res
+        .status(400)
+        .json({ error: "Invalid email or password.", status: 400 });
     }
 
     const comparedPassword = await comparePassword(
@@ -54,7 +64,9 @@ export const login = async (req: express.Request, res: express.Response) => {
     );
 
     if (!comparedPassword) {
-      return res.sendStatus(401);
+      return res
+        .status(401)
+        .json({ error: "Invalid email or password.", status: 401 });
     }
 
     user.authentication.sessionToken = generateToken({
@@ -71,6 +83,8 @@ export const login = async (req: express.Request, res: express.Response) => {
     return res.status(200).json(user).end();
   } catch (error) {
     console.error(error);
-    return res.sendStatus(400);
+    return res
+      .status(500)
+      .json({ error: "Internal server error.", status: 500 });
   }
 };

@@ -27,7 +27,6 @@ export default function Login() {
       if (response.status === 200) {
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("id", response.data._id);
-        localStorage.setItem("id", response.data._id);
         router.push("/dashboard");
       }
     } catch (e) {

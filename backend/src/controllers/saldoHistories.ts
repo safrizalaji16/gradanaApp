@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   createSaldoHistory,
   getSaldoHistoriesWithUserInfo,
@@ -15,7 +14,7 @@ export const getAllSaldoHistoriesWithUserInfo = async (
     res.status(200).json(saldoHistories).end();
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    res.status(500).json({ error: "Internal server error.", status: 500 });
   }
 };
 
@@ -30,7 +29,26 @@ export const updateSaldo = async (
     const user = await getUserById(id);
 
     if (!user) {
-      return res.sendStatus(404);
+      return res.status(404).json({ error: "User not found.", status: 404 });
+    }
+
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount.", status: 400 });
+    }
+
+    if (type !== "topup" && type !== "withdraw") {
+      return res
+        .status(400)
+        .json({
+          error: "Invalid type. Use 'topup' or 'withdraw'.",
+          status: 400,
+        });
+    }
+
+    if (type === "withdraw" && user.saldo < amount) {
+      return res
+        .status(400)
+        .json({ error: "Insufficient balance.", status: 400 });
     }
 
     const saldo = type === "topup" ? user.saldo + amount : user.saldo - amount;
@@ -47,6 +65,6 @@ export const updateSaldo = async (
     res.status(200).json(saldoHistory).end();
   } catch (error) {
     console.error(error);
-    res.status(400).send(error);
+    res.status(500).json({ error: "Internal server error.", status: 500 });
   }
 };

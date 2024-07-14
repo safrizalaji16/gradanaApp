@@ -31,9 +31,9 @@ export default async function handler(
 
     return res.status(405).json("Method not allowed");
   } catch (error) {
-    console.error("Error in Register:", error);
-    if (error instanceof Error) {
-      return res.status(500).json({ message: error.message });
+    console.error("Error in Register:", error.error);
+    if (error) {
+      return res.status(error.status).json({ message: error.error });
     } else {
       return res.status(500).json({ message: "An unknown error occurred" });
     }

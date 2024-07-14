@@ -19,8 +19,8 @@ export const saldoHistoriyService = {
         },
       })) as AxiosResponse<QueryListResponse<SaldoHistory>, {}>;
     } catch (e) {
-      console.log((e as AxiosError).request);
-      throw null;
+      console.log((e.response.data.error as AxiosError).request);
+      throw e.response.data;
     }
   },
 };
